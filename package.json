@@ -1,7 +1,7 @@
 {
   "name": "dsh-prompt-slim",
   "version": "0.1.0",
-  "description": "Replaces verbose built-in DSH system-prompt sections with shorter text via agent-scoped section shadowing.",
+  "description": "[DEPRECATED] 未知原因导致会话控制器雪崩，至今未能修复。已废弃。",
   "license": "MIT",
   "type": "module",
   "keywords": [
@@ -20,8 +20,8 @@
     "./package.json": "./package.json"
   },
   "meta": {
-    "title": "提示词精简（Prompt Slim）",
-    "description": "用同名段遮蔽把冗长的内置系统提示词段替换成精简文本；不改动未列名的段落。"
+    "title": "【已废弃】提示词精简（未知原因导致会话雪崩）",
+    "description": "未知原因导致会话控制器雪崩，至今未能修复。请勿启用。"
   },
   "dsh": {
     "bundle": {

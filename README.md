@@ -1,4 +1,9 @@
-# dsh-prompt-slim
+# ⚠️ [已废弃 / DEPRECATED] dsh-prompt-slim
+
+> [!CAUTION]
+> **警告 / STATUS: BROKEN & ABANDONED**  
+> **未知原因导致会话控制器雪崩，至今未能修复。**  
+> 启用该插件会导致 DeepSeek Harness 桌面端 Session Controller 握手雪崩、新建会话失败或侧边栏历史会话丢失/异常归档。请勿在任何生产或个人环境中使用此插件。本项目已废弃并终止维护。
 
 把 DSH 内置系统提示词里冗长的若干段替换成精简文本——**只改点名的段，其余原样**。
 
