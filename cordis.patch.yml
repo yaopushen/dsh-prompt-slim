@@ -1,0 +1,16 @@
+# dsh-prompt-slim bundle patch
+#
+# Inserts one Host row that shadows the listed system-prompt sections on each
+# agent's own scope. The replacement table lives in `sections.json` beside
+# `index.js` (single source of truth) and is read at activation.
+#
+# `config.sections` here would REPLACE that table wholesale; that is the hook for
+# tuning a row from the profile patch without touching the bundle. Leave it out
+# to use `sections.json`.
+#
+# Everything not named in the table stays exactly as composed — including
+# `plan:policy` (non-empty only while plan mode is active), the tool schemas, and
+# the dynamic runtime-context snapshot.
+- insert:
+    - id: prompt-slim
+      name: dsh-prompt-slim

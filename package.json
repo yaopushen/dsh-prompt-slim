@@ -1,0 +1,39 @@
+{
+  "name": "dsh-prompt-slim",
+  "version": "0.1.0",
+  "description": "Replaces verbose built-in DSH system-prompt sections with shorter text via agent-scoped section shadowing.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "system-prompt",
+    "prompt"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaopushen/dsh-prompt-slim.git"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "meta": {
+    "title": "提示词精简（Prompt Slim）",
+    "description": "用同名段遮蔽把冗长的内置系统提示词段替换成精简文本；不改动未列名的段落。"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "index.js",
+    "sections.json",
+    "cordis.patch.yml",
+    "dsh.plugin.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

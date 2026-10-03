@@ -1,0 +1,13 @@
+{
+  "id": "dsh-external/dsh-prompt-slim",
+  "version": "0.1.0",
+  "main": "./index.js",
+  "description": "用 agent 作用域同名段遮蔽，把 DSH 内置系统提示词里冗长的段替换成精简文本（本机实测 12 986 B → 7 216 B，−44.4%），未点名的段一律原样。",
+  "engines": {
+    "dsh": ">=0.2.0-rc"
+  },
+  "contributes": {
+    "tools": [],
+    "skills": []
+  }
+}
