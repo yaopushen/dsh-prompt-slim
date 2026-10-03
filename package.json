@@ -32,8 +32,12 @@
     "index.js",
     "sections.json",
     "cordis.patch.yml",
+    "verify.mjs",
     "dsh.plugin.json",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "scripts": {
+    "test": "node verify.mjs"
+  }
 }

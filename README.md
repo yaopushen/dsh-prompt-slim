@@ -48,12 +48,15 @@ MCP 三段是各服务器 `initialize` 返回的 `instructions` 原文，由 `@d
 **GitHub（推荐）** —— 官方 Plugin Manager 的安装目标填：
 
 ```
-github:yaopushen/dsh-prompt-slim
+github:yaopushen/dsh-prompt-slim          # 跟随 main
+github:yaopushen/dsh-prompt-slim#v0.1.0   # 钉住版本
 ```
 
 **本机目录** —— 安装目标填 `D:\DEEPSEEK\dsh-prompt-slim`。
 
-两者都由 Plugin Manager 自己完成依赖安装与 bundle 选择。
+两者都由 Plugin Manager 自己完成依赖安装与 bundle 选择。对 GitHub spec，`installBundle` 会先用 `git ls-remote` 做一次仓库可达性预检（默认 5 s，`githubConnectionTimeoutMs`），然后交给 pnpm；本包无依赖、无构建脚本、不声明 DSH `peerDependencies`，因此不涉及版本兼容豁免或构建脚本批准。
+
+安装路径实际消费的只有两处：`package.json` 的 `dsh.bundle.patch` 与它指向的 `cordis.patch.yml`。仓库里的 `dsh.plugin.json` 只是外部插件惯例的元信息，本机 DSH 构建不读它。
 
 **手工等价路径**（`plugin_manager` 不可用时；profile 目录 = `%USERPROFILE%\.dsh\profiles\desktop`）：
 
@@ -71,6 +74,14 @@ Pop-Location
 2. 看该会话的系统提示词：`team:policy` 应为一段两行文本（Agent Teams + Peers & tasks），`mcp:anysearch` 段应从 2.3 KB 降到约 620 B。
 3. 检查计划模式：在 plan 模式下 `plan:policy` 段应仍然出现——这是本方案相对「整份替换」的关键差别。
 4. 启动日志里不应有 `prompt-slim: cannot replace section ...` 警告。
+
+## 自检
+
+```bash
+node verify.mjs   # 等价于 npm test
+```
+
+无需安装 DSH、无第三方依赖。它用假 ctx/agent 走一遍 `apply()`，断言 18 条注册的 name / order / text / interpolate 与 `sections.json` 完全一致、`agent/created` 监听器只注册一个、异常 payload（缺 `ctx`、纯垃圾对象）不抛异常，并打印替换文本总量。改动 `sections.json` 后跑一次即可。
 
 ## 回滚
 
