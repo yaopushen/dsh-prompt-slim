@@ -1,10 +1,5 @@
 [
   {
-    "name": "team:policy",
-    "orderKey": "TEAM_POLICY",
-    "text": "Agent Teams: create teammates only when the user explicitly asks. The Lead and all teammates share one working directory and filesystem — edits are visible immediately. Give each writer a disjoint write scope, record expected scopes on shared tasks, and order work with dependencies (scopes are advisory, not locks).\n\nPeers & tasks: use the targets from spawn_teammate/list_agents for send_message, interrupt_agent, and task ownership. send_message steers a running target at its nearest step boundary and starts or resumes an inactive one; inactive only means no turn is running. A delivered message starts with its id and sender. A successful send is durable even if reported queued — do not resend. Shared tasks: list, get, claim with the current revision, work, complete; readiness never starts an owner. Before wait_agent, confirm via list_agents that another required member is running or provisioning; if it is inactive, send_message first. wait_agent observes only changes after that call starts, never wakes a member, and returns noProgress immediately when no other member can produce a change; re-list after wakeup or timeout. The Lead waits for required teammates before giving the final answer."
-  },
-  {
     "name": "tool:bash",
     "orderKey": "TOOL_BASH",
     "text": "Check the [exit code: N] marker on every bash result and investigate failures. Prefer read/edit/write for file changes; if one returns FS_STALE_VERSION, re-read the file, rebase the change onto the new content, and retry. Bash, formatters, code generators, and scripts are not fully protected by the filesystem version guard — coordinate them explicitly and have the Lead review the final diff and run tests."

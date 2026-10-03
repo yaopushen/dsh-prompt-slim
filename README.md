@@ -19,12 +19,11 @@
 
 ## 替换表
 
-`sections.json` 是唯一真源，18 条：
+`sections.json` 是唯一真源，共 17 条：
 
 | 段名 | 原 → 新（字节） |
 |---|---|
-| `team:policy` | 1992 → 1211 |
-| `tool:bash` | 92 → 410（承接原 `team:policy` 里的 FS_STALE / bash 不受版本保护一句） |
+| `tool:bash` | 92 → 410（承接 FS_STALE / bash 不受版本保护说明） |
 | `tool:read` / `tool:write` / `tool:edit` | 130/140/132 → 113/89/84 |
 | `tool:glob` / `tool:grep` | 75/133 → 75/71 |
 | `tool:jobs` | 384 → 272 |
@@ -37,7 +36,7 @@
 | `ui:deliverable-file-references` | 1259 → 528 |
 | `app:web-surface` | 990 → 494 |
 
-**故意不动**：`harness:identity`、`deployment:persona-prefix`、`deployment:persona-suffix`（身份与 `{{model}}`/`{{cwd}}` 事实）、`plan:policy`（条件段）、`mcp-resource-servers`（动态服务器名列表）、`harness:source`（本机检出路径）、capability catalog（on-demand 能力目录的唯一指引）。
+**故意不动**：`team:policy`（由官方 `@deepseek-ai/dsh-experimental-agent-team-profile` 在 agent scope 动态注册，避免 scope 命名冲突）、`harness:identity`、`deployment:persona-prefix`、`deployment:persona-suffix`（身份与 `{{model}}`/`{{cwd}}` 事实）、`plan:policy`（条件段）、`mcp-resource-servers`（动态服务器名列表）、`harness:source`（本机检出路径）、capability catalog（on-demand 能力目录的唯一指引）。
 
 MCP 三段是各服务器 `initialize` 返回的 `instructions` 原文，由 `@deepseek-ai/dsh-mcp-client` 原样注入；`dsh-mcp-client` 没有关闭开关（只有 `maxInstructionBytes`，超限是报错不是截断），所以只能在装配层替换。替换文本保留了全部硬门槛：`get_sub_domains` 必须先于垂类 `search`、`openalex_resolve_name` 必须先于按实体过滤、`get_me`/`state_reason`/PR 三步流程。
 
@@ -71,7 +70,7 @@ Pop-Location
 ## 验证
 
 1. 新开一个会话（本插件在 `agent/created` 时注册，已存在的会话不受影响）。
-2. 看该会话的系统提示词：`team:policy` 应为一段两行文本（Agent Teams + Peers & tasks），`mcp:anysearch` 段应从 2.3 KB 降到约 620 B。
+2. 看该会话的系统提示词：`mcp:anysearch` 段应从 2.3 KB 降到约 620 B。
 3. 检查计划模式：在 plan 模式下 `plan:policy` 段应仍然出现——这是本方案相对「整份替换」的关键差别。
 4. 启动日志里不应有 `prompt-slim: cannot replace section ...` 警告。
 
@@ -81,7 +80,7 @@ Pop-Location
 node verify.mjs   # 等价于 npm test
 ```
 
-无需安装 DSH、无第三方依赖。它用假 ctx/agent 走一遍 `apply()`，断言 18 条注册的 name / order / text / interpolate 与 `sections.json` 完全一致、`agent/created` 监听器只注册一个、异常 payload（缺 `ctx`、纯垃圾对象）不抛异常，并打印替换文本总量。改动 `sections.json` 后跑一次即可。
+无需安装 DSH、无第三方依赖。它用假 ctx/agent 走一遍 `apply()`，断言 17 条注册的 name / order / text / interpolate 与 `sections.json` 完全一致、`agent/created` 监听器只注册一个、异常 payload（缺 `ctx`、纯垃圾对象）不抛异常，并打印替换文本总量。改动 `sections.json` 后跑一次即可。
 
 ## 回滚
 

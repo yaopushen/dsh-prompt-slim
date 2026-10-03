@@ -61,9 +61,20 @@ export function apply(ctx, config) {
     return
   }
 
+  // Practices rule 19: Keep per-agent disposers keyed by agent in plugin-level effect
+  const activeDisposers = new Map()
+
+  ctx.effect(() => () => {
+    for (const dispose of activeDisposers.values()) {
+      try { dispose() } catch {}
+    }
+    activeDisposers.clear()
+  })
+
   ctx.on('agent/created', (payload) => {
     try {
-      const agentCtx = payload?.agent?.ctx
+      const agent = payload?.agent
+      const agentCtx = agent?.ctx
       if (agentCtx === undefined) return
 
       const disposers = []
@@ -96,11 +107,10 @@ export function apply(ctx, config) {
           }
         }
       }
-      // Two owners on purpose: unloading this plugin removes the replacements,
-      // and so does disposing the agent they were registered for.
-      const release = ctx.effect(() => disposeAll)
+
+      if (agent) activeDisposers.set(agent, disposeAll)
       agentCtx.effect(() => () => {
-        release()
+        if (agent) activeDisposers.delete(agent)
         disposeAll()
       })
     } catch (error) {
@@ -108,3 +118,4 @@ export function apply(ctx, config) {
     }
   })
 }
+
